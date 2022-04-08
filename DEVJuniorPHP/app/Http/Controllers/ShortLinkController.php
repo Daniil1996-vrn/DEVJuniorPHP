@@ -12,6 +12,12 @@ class ShortLinkController extends Controller
         return view('shortenLink',[
             'shortLinks'=>ShortLink::all()
         ]);
+     
+    }
+
+    public function showShortLinkAllRecords()
+    {
+        return response()->json(ShortLink::all());
     }
 
     public function store(Request $request)

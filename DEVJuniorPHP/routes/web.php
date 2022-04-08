@@ -19,6 +19,7 @@ Route::get('/', function () {
 });
 
 
-Route::get('cc', [ShortLinkController::class, 'index'])->name('generate.shorten.link');
+Route::get('cc', [ShortLinkController::class, 'index']);
+Route::get('showShortLinkAllRecords', [ShortLinkController::class, 'showShortLinkAllRecords']);
 Route::post('cc/post', [ShortLinkController::class, 'store']);
-Route::get('shortLink/{code}', [ShortLinkController::class, 'shortenLink'])->name('shorten.link');
+//Route::get('shortLink/{code}', [ShortLinkController::class, 'shortenLink'])->name('shorten.link');

@@ -18,31 +18,20 @@
     </div>
 
     <div class="card-body">
-        @if(Session::has('success'))
-        <div class="alert alert-success">
-            <p>{{Session::get('success')}}</p>
-        </div>
-        @endif
+        
 
-        <table class="table table-bordered table-sm">
+        <table id="tableShowLinks" class="table table-bordered table-sm">
             <thead>
                 <th>ID</th>
                 <th>Сокращённая ссылка</th>
                 <th>Ссылка</th>
-                <th>Переходов</th>
+               
             </thead>
             <tbody>
-                @foreach($shortLinks as $link)
-                <tr>
-                    <td>{{$link->id}}</td>
-                    <td>
-                        <a href="{{route('shorten.link', $link->code)}}" target="_blank">
-                            {{route('shorten.link', $link->code)}}</a>
-                    </td>
-                    <td>{{$link->link}}</td>
-                    <td>{{$link->count}}</td>
-                </tr>
-                @endforeach
+               
+               
+              
+               
             </tbody>
         </table>
 
@@ -79,6 +68,35 @@
 });*/
 
 $(document).ready(function() {
+
+    $.ajax({
+      type: "get",
+      url: "http://127.0.0.1:8000/showShortLinkAllRecords",
+     
+      success: function(result){
+        //  console.log(result);
+       
+       // $('#tableShowLinks tr').empty();
+     
+       var body = $('#tableShowLinks tbody');
+       
+       // Body
+       for (var d in result) {
+        var data = result[d];
+        console.log(result);
+          $('#tableShowLinks tbody').append($('<tr>')
+              .append($('<td>', { text: data.id }))
+              .append($('<a href="'+data.link+' " target="_blank"> '+data.code+"</a>"))
+              .append($('<td>', { text: data.link }))
+              
+          )
+       }
+
+	}
+    
+    });
+
+
   $("#submit").click(function() {
     var link =  $("#link").val();
     var query = {
@@ -91,9 +109,22 @@ $(document).ready(function() {
       type: "POST",
       url: "http://127.0.0.1:8000/cc/post",
       data: query,
-      success: function(data){
-		alert(data);    
-		//alert(data.error);   
+      success: function(result){
+        
+        var body = $('#tableShowLinks tbody');
+       
+       // Body
+       for (var d in result) {
+        var data = result[d];
+        console.log(result);
+          $('#tableShowLinks tbody').append($('<tr>')
+              .append($('<td>', { text: data.id }))
+              .append($('<a href="'+data.link+' " target="_blank"> '+data.code+"</a>"))
+              .append($('<td>', { text: data.link }))
+              
+          )
+       }
+
 	}
     
     });
