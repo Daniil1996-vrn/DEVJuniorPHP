@@ -1,0 +1,75 @@
+version: "3.7"
+
+networks:
+  laravel:
+
+volumes:
+  database:
+
+services:
+  database:
+    image: postgres:10
+    container_name: postgres
+    restart: "no"
+    volumes:
+      - .:/var/lib/postgresql/data
+    networks:
+      - laravel
+    ports:
+      - 5432:5432
+    environment:
+      
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "admin1234"
+      POSTGRES_DB: "DEVJuniorPHP"
+      
+      
+    
+
+  composer:
+    image: composer:latest
+    container_name: composer
+    volumes:
+      - ./:/app
+    working_dir: /app
+    command: composer install
+
+  node:
+    image: node:12
+    container_name: node
+    volumes:
+      - ./:/app
+    working_dir: /app
+    command: npm install
+
+  app:
+    container_name: app
+    restart: "no"
+    volumes:
+      - ./:/var/www
+      
+    networks:
+      - laravel
+    depends_on:
+      - composer
+      - node
+    build:
+      context: .
+      dockerfile: ./docker/app/dockerfile
+    
+    command: php-fpm
+
+  webserver:
+    image: nginx:stable
+    container_name: webserver
+    restart: "no"
+    volumes:
+      - ./:/var/www
+      - ./docker/webserver/nginx.conf/
+    networks:
+      - laravel
+    ports:
+      - 8000:8000
+    depends_on:
+      - database
+      - app
