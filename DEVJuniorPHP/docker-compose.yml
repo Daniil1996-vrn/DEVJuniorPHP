@@ -46,7 +46,7 @@ services:
     container_name: app
     restart: "no"
     volumes:
-      - ./:/var/www
+      - ./app
       
     networks:
       - laravel
@@ -64,8 +64,8 @@ services:
     container_name: webserver
     restart: "no"
     volumes:
-      - ./:/var/www
-      - ./docker/webserver/nginx.conf/
+      - ./app
+      - ./nginx/default.conf:/etc/nginx/conf.d 
     networks:
       - laravel
     ports:
