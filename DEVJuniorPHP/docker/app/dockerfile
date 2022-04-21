@@ -3,9 +3,5 @@ FROM php:8.1.4-fpm-alpine3.14
 # Update package manager ready for deps to be installed
 RUN apk update
 
-COPY package.json .
-#RUN npm install
-COPY . .
 
-# Set the working directory of the container to the hosted directory
-WORKDIR /app
+WORKDIR /var/www/DEVJuniorPHP

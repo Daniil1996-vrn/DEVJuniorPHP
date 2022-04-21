@@ -26,33 +26,27 @@ services:
       
     
 
-  composer:
-    image: composer:latest
-    container_name: composer
-    volumes:
-      - ./:/app
-    working_dir: /app
-    command: composer install
+  
+  
 
-  node:
+  npm:  
     image: node:12
-    container_name: node
-    volumes:
-      - ./:/app
-    working_dir: /app
-    command: npm install
+    working_dir: /var/www/DEVJuniorPHP
+    entrypoint: ["npm"]
+    volumes: 
+    - "./www/:/var/www/DEVJuniorPHP"
 
   app:
     container_name: app
     restart: "no"
     volumes:
-      - ./app
+      - ./:/var/www/DEVJuniorPHP
       
     networks:
       - laravel
     depends_on:
-      - composer
-      - node
+      - npm
+      
     build:
       context: .
       dockerfile: ./docker/app/dockerfile
@@ -64,7 +58,7 @@ services:
     container_name: webserver
     restart: "no"
     volumes:
-      - ./app
+      - ./:/var/www/DEVJuniorPHP
       - ./nginx/default.conf:/etc/nginx/conf.d 
     networks:
       - laravel
